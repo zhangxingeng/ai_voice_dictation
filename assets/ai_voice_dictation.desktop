@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=AI Voice Dictation
+Comment=Local dictation: press Super+Shift+D, speak, copy
+Exec=ai_voice_dictation
+Icon=audio-input-microphone
+Terminal=false
+Categories=Utility;
+Keywords=dictation;speech;transcribe;voice;whisper;
+StartupWMClass=ai_voice_dictation

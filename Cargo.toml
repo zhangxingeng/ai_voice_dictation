@@ -1,0 +1,49 @@
+[package]
+name = "ai_voice_dictation"
+version = "0.1.0"
+edition = "2024"
+description = "Hotkey dictation for the Linux desktop. Press, speak, copy."
+license = "MIT"
+authors = ["Shane Zhang"]
+repository = "https://github.com/zhangxingeng/ai_voice_dictation"
+
+[dependencies]
+anyhow = "1"
+cpal = "0.18"
+# Only what a small native window needs: no web target, no accessibility
+# bridge, no persistence. glow is the lighter of the two renderers.
+#
+# X11 only, on purpose. GNOME ignores always-on-top from native Wayland
+# windows -- there is no protocol for it -- but honours it for X11 windows
+# under XWayland, which every GNOME session runs. With mutter's
+# xwayland-native-scaling the window is still sharp at fractional scales.
+eframe = { version = "0.36", default-features = false, features = ["default_fonts", "glow", "x11"] }
+sha2 = "0.11"
+ureq = "3"
+# Only to ask ggml which device it will run on; see engine.rs.
+whisper-rs-sys = "0.15"
+# Vulkan is the one GPU backend that needs nothing installed beyond the
+# graphics driver the machine already has -- NVIDIA, AMD and Intel alike -- and
+# whisper.cpp falls back to the CPU on its own when there is no device.
+whisper-rs = { version = "0.16", features = ["vulkan"] }
+
+[profile.release]
+lto = "thin"
+strip = true
+
+[package.metadata.deb]
+# Debian package names cannot contain underscores.
+name = "ai-voice-dictation"
+section = "sound"
+extended-description = """\
+Press Super+Shift+D anywhere, speak, press it again. The transcript lands in \
+an editable window you can fix and copy. Runs Whisper locally, on the GPU \
+through Vulkan when there is one."""
+# $auto reads the binary: libvulkan1, ALSA, libc, libstdc++.
+depends = "$auto"
+# Chinese glyphs for the transcript; see ui::install_fonts.
+recommends = "fonts-noto-cjk"
+assets = [
+    ["target/release/ai_voice_dictation", "usr/bin/", "755"],
+    ["assets/ai_voice_dictation.desktop", "usr/share/applications/", "644"],
+]
