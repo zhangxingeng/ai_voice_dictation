@@ -22,6 +22,7 @@ mod models;
 mod paths;
 mod session;
 mod ui;
+mod update;
 mod vad;
 
 use control::Dictation;
@@ -78,6 +79,12 @@ fn run() -> ExitCode {
         }
     }));
     let dictation = Arc::new(Dictation::new(session));
+    let repaint = Arc::clone(&window);
+    let updater = update::Updater::check(move || {
+        if let Some(ctx) = repaint.get() {
+            ctx.request_repaint();
+        }
+    });
 
     let control = Arc::clone(&dictation);
     let _server = match ipc::Server::start(&paths::socket(), move |command| {
@@ -118,7 +125,7 @@ fn run() -> ExitCode {
         Box::new(move |cc| {
             ui::install_fonts(&cc.egui_ctx);
             window.set(cc.egui_ctx.clone()).ok();
-            Ok(Box::new(ui::Window::new(dictation)))
+            Ok(Box::new(ui::Window::new(dictation, updater)))
         }),
     );
     match result {

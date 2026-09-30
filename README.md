@@ -28,6 +28,10 @@ Launch **AI Voice Dictation** from the app grid. The first launch downloads the 
 model (574 MB) and registers the shortcut with GNOME. To change the key, edit
 it in *Settings → Keyboard → Custom Shortcuts*; the app will not change it back.
 
+**Updates:** when a newer release exists, an **Update** button appears in the
+window. It downloads the new `.deb` and installs it after a password prompt;
+restart the app to use it.
+
 To remove the shortcut: `ai_voice_dictation --unbind`. To remove the app:
 `sudo apt remove ai-voice-dictation`. The model lives in `~/.local/share/ai_voice_dictation/`.
 

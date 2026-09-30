@@ -14,6 +14,7 @@
 use crate::control::Dictation;
 use crate::language::{self, Language};
 use crate::session::Phase;
+use crate::update::{self, Updater};
 use eframe::egui::{self, Color32, Key, RichText, Sense, Vec2, ViewportCommand};
 use std::sync::Arc;
 use std::time::{Duration, Instant};
@@ -30,14 +31,15 @@ const GREEN: Color32 = Color32::from_rgb(0x46, 0xa7, 0x58);
 
 pub struct Window {
     dictation: Arc<Dictation>,
+    updater: Updater,
     text: String,
     copied: Option<Instant>,
     pinned: bool,
 }
 
 impl Window {
-    pub fn new(dictation: Arc<Dictation>) -> Self {
-        Self { dictation, text: String::new(), copied: None, pinned: false }
+    pub fn new(dictation: Arc<Dictation>, updater: Updater) -> Self {
+        Self { dictation, updater, text: String::new(), copied: None, pinned: false }
     }
 
     fn append(&mut self, fragment: &str) {
@@ -94,6 +96,7 @@ impl eframe::App for Window {
                 }
                 ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
                     ui.label(RichText::new(self.dictation.device()).weak());
+                    update_control(ui, &self.updater);
                 });
             });
             ui.add_space(6.0);
@@ -127,6 +130,28 @@ impl eframe::App for Window {
                 );
             });
         });
+    }
+}
+
+fn update_control(ui: &mut egui::Ui, updater: &Updater) {
+    match updater.state() {
+        update::State::Current => {}
+        update::State::Available { version, .. } => {
+            if ui.button(format!("Update to v{version}")).clicked() {
+                updater.install();
+            }
+        }
+        update::State::Installing { version } => {
+            ui.label(RichText::new(format!("Installing v{version}…")).weak());
+        }
+        update::State::Installed { version } => {
+            ui.label(
+                RichText::new(format!("v{version} installed, restart to use it")).color(GREEN),
+            );
+        }
+        update::State::Failed(message) => {
+            ui.label(RichText::new(message).color(RED));
+        }
     }
 }
 

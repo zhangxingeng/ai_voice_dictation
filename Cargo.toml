@@ -19,7 +19,8 @@ cpal = "0.18"
 # xwayland-native-scaling the window is still sharp at fractional scales.
 eframe = { version = "0.36", default-features = false, features = ["default_fonts", "glow", "x11"] }
 sha2 = "0.11"
-ureq = "3"
+serde_json = "1"
+ureq = { version = "3", features = ["json"] }
 # Only to ask ggml which device it will run on; see engine.rs.
 whisper-rs-sys = "0.15"
 # Vulkan is the one GPU backend that needs nothing installed beyond the

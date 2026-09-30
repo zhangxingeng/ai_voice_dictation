@@ -61,7 +61,13 @@ Vulkan needs only `libvulkan1`, which every desktop already has.
 5. **Silence never reaches Whisper** (`vad.rs`). Whisper invents text for
    silence ("you", "."). The gate is relative to the burst's own noise floor,
    so it works at any microphone gain.
-6. **Cost is linear in audio length.** whisper.cpp encodes fixed 30 s windows
+6. **Updates are a button, not a repository.** At launch the app asks
+   GitHub for the latest release; if it is newer, an Update button downloads
+   the `.deb` and runs `pkexec apt-get install`. An apt repository on Pages
+   was considered and rejected as too much machinery; AppImage (FUSE, manual
+   `chmod +x`, no launcher) and Flatpak (sandbox blocks the GNOME shortcut and
+   the socket; large runtime) as poor fits. Offline, nothing shows.
+7. **Cost is linear in audio length.** whisper.cpp encodes fixed 30 s windows
    and seeks by timestamp; no cutting, no overlap-stitching needed.
 
 ---
@@ -135,6 +141,7 @@ src/
   hotkey.rs    GNOME custom keybinding registration
   ipc.rs       unix socket: one line in, one line out
   paths.rs     XDG locations
+  update.rs    check GitHub for a newer release, install it via pkexec
   ui.rs        the egui window
 assets/ai_voice_dictation.desktop
 ```
