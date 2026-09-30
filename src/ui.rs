@@ -1,5 +1,5 @@
-//! The window: a status line with a level meter, the editable transcript, and
-//! a copy button.
+//! The window: a status line with a level meter, the editable transcript, a
+//! language picker, a copy button, and an update button when there is one.
 //!
 //! egui because it is the least code for this: immediate mode means the
 //! window is a function of the current state, redrawn when something changes,

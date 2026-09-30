@@ -3,9 +3,9 @@
 //! dB-scaled because speech sits around 0.01-0.1 RMS, where a linear bar
 //! barely moves and looks broken.
 //!
-//! The floor sits above room tone (a quiet room measured -42 to -39.6 dBFS
-//! on a real USB microphone), so the bar is empty until someone speaks. An empty bar while
-//! talking then means one thing: the wrong microphone, or none at all.
+//! The floor sits above room tone (a quiet room measured -42 to -39.6 dBFS on
+//! a real USB microphone), so the bar is empty until someone speaks. An empty
+//! bar while talking then means one thing: the wrong microphone, or none.
 
 const FLOOR_DB: f32 = -36.0;
 const CEILING_DB: f32 = -12.0;

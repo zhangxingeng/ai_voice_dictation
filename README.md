@@ -7,36 +7,54 @@ where you can fix it and copy it. Everything runs on your machine.
 - **Recording never waits.** Stop one burst and start the next while the first
   is still transcribing; results append in order.
 - **Editable transcript.** Fix what Whisper got wrong before you copy.
-- **English or Chinese**, picked in the window. Pick before you stop
-  recording; it applies to that burst and the ones after it.
-- **Level meter**, so a muted microphone is obvious before you've said the
-  whole sentence.
+- **English or Chinese**, picked in the window.
+- **Level meter.** It stays empty until you speak, so a muted or wrong
+  microphone is obvious straight away.
 - **GPU without setup.** Whisper `large-v3-turbo` runs through whisper.cpp on
   Vulkan, which works with the graphics driver you already have (NVIDIA, AMD,
   Intel) and falls back to the CPU when there is no GPU.
+- **One-click updates** from inside the app.
 
 ## Install
 
 Download `ai-voice-dictation_<version>_amd64.deb` from
-[Releases](https://github.com/zhangxingeng/ai_voice_dictation/releases) and open it, or:
+[Releases](https://github.com/zhangxingeng/ai_voice_dictation/releases) and open
+it, or:
 
 ```sh
 sudo apt install ./ai-voice-dictation_*_amd64.deb
 ```
 
-Launch **AI Voice Dictation** from the app grid. The first launch downloads the speech
-model (574 MB) and registers the shortcut with GNOME. To change the key, edit
-it in *Settings → Keyboard → Custom Shortcuts*; the app will not change it back.
+Needs Ubuntu 24.04 or newer (or another Debian-based distro of that age).
+Chinese text uses the system's CJK font; the package recommends
+`fonts-noto-cjk`, which apt installs with it by default.
+
+## Use
+
+Launch **AI Voice Dictation** from the app grid. The first launch downloads the
+speech model (574 MB) and registers the global shortcut with GNOME.
+
+| | |
+|---|---|
+| <kbd>Super</kbd>+<kbd>Shift</kbd>+<kbd>D</kbd> | start recording / stop and transcribe — works from any app |
+| Language picker | applies to the recording in progress and every later one |
+| **Copy** | copies the whole transcript |
+| <kbd>Esc</kbd> | quit |
+
+The status line shows what is happening: *Recording* with the level meter,
+*Transcribing (n)* while bursts are queued, *Done* when the text is in.
+
+To change the shortcut, edit it in *Settings → Keyboard → Custom Shortcuts*;
+the app will not change it back. The global shortcut needs GNOME. On other
+desktops, bind `ai_voice_dictation --toggle` to a key yourself.
 
 **Updates:** when a newer release exists, an **Update** button appears in the
 window. It downloads the new `.deb` and installs it after a password prompt;
 restart the app to use it.
 
-To remove the shortcut: `ai_voice_dictation --unbind`. To remove the app:
-`sudo apt remove ai-voice-dictation`. The model lives in `~/.local/share/ai_voice_dictation/`.
-
-The global shortcut needs GNOME. Elsewhere the app works, but you trigger it by
-binding `ai_voice_dictation --toggle` to a key yourself.
+**Remove:** `ai_voice_dictation --unbind` removes the shortcut, then
+`sudo apt remove ai-voice-dictation`. The model lives in
+`~/.local/share/ai_voice_dictation/`.
 
 ## Development
 
@@ -53,9 +71,18 @@ bindings that lack the Vulkan symbols, and fails later with a confusing error.
 cargo fmt --check
 cargo clippy --all-targets -- -D warnings
 cargo test
-DICTATION_WAV=clip.wav [DICTATION_LANG=zh] cargo test --release -- --ignored   # real model, 16 kHz mono WAV
+cargo test --release -- --ignored   # real model and live GitHub; see below
 ```
 
-Release: push a `v*` tag. CI builds the `.deb` and attaches it to a release.
+The ignored tests need `DICTATION_WAV=clip.wav` (16 kHz mono) and optionally
+`DICTATION_LANG=zh`.
+
+**Release:** bump `version` in `Cargo.toml`, commit, and push a `v*` tag. CI
+builds the `.deb` and publishes it as a GitHub release, and installed copies
+offer the update.
 
 See [`STATE.md`](STATE.md) for the design and the measurements behind it.
+
+## License
+
+MIT — see [`LICENSE`](LICENSE).

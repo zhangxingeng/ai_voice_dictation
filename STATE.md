@@ -50,7 +50,8 @@ Vulkan needs only `libvulkan1`, which every desktop already has.
 2. **Everything slow is injected.** The session takes a transcriber closure,
    the hotkey code takes a `gsettings` runner, the model installer takes a
    reader. Tests run in milliseconds with fakes; none touch the network, the
-   GPU, or the user's real dconf database.
+   GPU, or the user's real dconf database, except the two opt-in `#[ignore]`
+   tests (real model, live GitHub API).
 3. **Never write the user's keybinding after creation.** The key is written
    when our entry is created; afterwards only the command is refreshed (it
    encodes where the binary lives). Changing the key is done in GNOME Settings.
@@ -118,10 +119,10 @@ measurements, so absolute times are pessimistic.
 | Type into the focused app | ❌ `/dev/uinput` is root-only; `wtype` needs a protocol GNOME lacks. Only route is the RemoteDesktop portal (consent dialog, unproven). **Clipboard only.** |
 | Launcher ↔ window association | `.desktop` file name, `StartupWMClass` and the X11 `WM_CLASS` are all `ai_voice_dictation`. |
 
-A launcher must never `Exec` an interpreter: GNOME's Resources groups
-processes by the basename of `cmdline[0]`, so an `Exec=python3 …` entry claims
-every python3 process on the machine, and "End" kills them all. A native
-binary named `ai_voice_dictation` makes this impossible.
+A launcher must never `Exec` a generic interpreter: GNOME's Resources groups
+processes by the basename of `cmdline[0]`, so such an entry claims every
+process of that interpreter on the machine, and "End" kills them all. A native
+binary with its own name avoids this by construction.
 
 ---
 

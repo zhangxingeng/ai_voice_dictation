@@ -3,8 +3,8 @@
 //! One binary, three modes:
 //!
 //! * `ai_voice_dictation` -- the app: a window, a microphone, and the model.
-//! * `ai_voice_dictation --toggle` -- what the GNOME shortcut runs. Tells the running
-//!   app to start or stop recording, then exits.
+//! * `ai_voice_dictation --toggle` -- what the GNOME shortcut runs. Tells the
+//!   running app to start or stop recording, then exits.
 //! * `ai_voice_dictation --unbind` -- removes the shortcut from GNOME.
 //!
 //! The ordering here is the product: the window and the hotkey are live

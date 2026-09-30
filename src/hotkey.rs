@@ -1,7 +1,7 @@
 //! Registering the global hotkey as a GNOME custom keybinding.
 //!
-//! GNOME owns the grab and runs `ai_voice_dictation --toggle` when the key fires. No
-//! root, no extension, nothing installed.
+//! GNOME owns the grab and runs `ai_voice_dictation --toggle` when the key
+//! fires. No root, no extension, nothing installed.
 //!
 //! Custom keybindings are an array of dconf paths (`.../customN/`), each
 //! holding name/binding/command under a relocatable schema. Registering means:
@@ -18,8 +18,7 @@ use std::process::Command;
 
 /// Super is the desktop's modifier by convention; apps don't bind it, so a
 /// global grab here shadows nothing. Every Ctrl/Alt/Shift combo belongs to the
-/// focused app -- Ctrl+Shift+D was tried first and stole "bookmark all tabs"
-/// from browsers.
+/// focused app -- Ctrl+Shift+D, for one, is "bookmark all tabs" in browsers.
 pub const BINDING: &str = "<Super><Shift>d";
 pub const NAME: &str = "AI voice dictation";
 

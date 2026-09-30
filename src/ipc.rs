@@ -2,7 +2,8 @@
 //!
 //! Wayland gives ordinary clients no global hotkey. What works on GNOME
 //! without root or an extension is a custom keybinding that runs a command --
-//! here `ai_voice_dictation --toggle` -- which pokes the running app over this socket.
+//! here `ai_voice_dictation --toggle` -- which pokes the running app over this
+//! socket.
 //!
 //! A socket rather than a signal because the reply matters: the command has to
 //! know whether anyone was listening, so it can say the app is not running
